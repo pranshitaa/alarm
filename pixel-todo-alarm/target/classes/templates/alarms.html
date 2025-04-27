@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Pixel Alarms</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #fdf6e3;
+            text-align: center;
+            padding: 20px;
+            transition: opacity 1s ease;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #8b5cf6;
+        }
+        #clock {
+            font-size: 2em;
+            margin-top: 10px;
+            color: #6d28d9;
+            animation: glow 1.5s infinite alternate;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 5px #8b5cf6, 0 0 10px #8b5cf6; }
+            to { text-shadow: 0 0 20px #6d28d9, 0 0 30px #6d28d9; }
+        }
+        form {
+            margin-top: 20px;
+        }
+        input, button {
+            font-size: 18px;
+            padding: 10px;
+            margin: 5px;
+            border: 2px solid #8b5cf6;
+            border-radius: 10px;
+        }
+        button {
+            background-color: #8b5cf6;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #6d28d9;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+            background: #e0d7f5;
+            padding: 10px;
+            border-radius: 12px;
+            width: 320px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+
+<h1>📅 Your Pixel Alarms</h1>
+<h2 id="clock"></h2>
+
+<form action="/alarms/create" method="post">
+    <input type="datetime-local" name="time" required />
+    <input type="text" name="purpose" placeholder="Purpose" required />
+    <button type="submit">Create Alarm</button>
+</form>
+
+<ul>
+    <th:block th:each="alarm : ${alarms}">
+        <li>
+            <span th:text="${alarm.purpose}">Purpose</span> at 
+            <span th:text="${#temporals.format(alarm.alarmTime, 'HH:mm')}">Time</span>
+        </li>
+    </th:block>
+</ul>
+
+<script>
+    function checkAlarmFromServer() {
+        fetch('/alarms/check')
+            .then(response => response.text())
+            .then(message => {
+                if (message === "RING") {
+                    document.body.style.opacity = '0';
+                    setTimeout(() => {
+                        window.location.href = "/capture.html";
+                    }, 1000);
+                }
+            });
+    }
+
+    setInterval(checkAlarmFromServer, 1000); // Check every 1 second (earlier 10s)
+
+    function updateClock() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        document.getElementById('clock').innerText = `${hours}:${minutes}:${seconds}`;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+</script>
+
+</body>
+</html>

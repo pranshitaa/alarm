@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Capture</title>
+</head>
+<body style="text-align: center; padding-top: 50px; background-color: #fff0f5; font-family: 'Comic Sans MS', cursive;">
+
+<h1>📸 Capture your moment!</h1>
+
+<video id="camera" width="320" height="240" autoplay style="border: 4px solid #ff69b4; border-radius: 12px;"></video>
+
+<br><br>
+
+<button onclick="redirectToCelebrate()" style="padding: 10px 20px; font-size: 18px; border-radius: 12px; background-color: #ff69b4; color: white; border: none;">Capture</button>
+
+<!-- Audio Player (muted initially) -->
+<audio id="captureMusic" loop muted>
+    <source src="https://cdn.pixabay.com/audio/2023/04/01/audio_7991f33ba0.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+</audio>
+
+<script>
+    // Camera start
+    const video = document.getElementById('camera');
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            video.srcObject = stream;
+        })
+        .catch(err => {
+            console.error("Error accessing camera:", err);
+        });
+
+    // Music start after first user click
+    window.addEventListener('click', () => {
+        const music = document.getElementById('captureMusic');
+        music.muted = false;
+        music.play();
+    }, { once: true });
+
+    function redirectToCelebrate() {
+        window.location.href = "/celebrate.html";
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Congratulations!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #ffe0e9, #f9c5d5, #fcb5c1);
+            font-family: 'Comic Neue', cursive;
+            text-align: center;
+            color: #d63384;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            animation: float 1.5s infinite alternate;
+        }
+        p {
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+        @keyframes float {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+
+<h1>🎉 Yayyy! 🎉</h1>
+<p>Captured Perfectly 💖</p>
+
+<canvas id="confetti"></canvas>
+
+<!-- Kirby music here too -->
+<audio id="celebrateMusic" loop muted>
+    <source src="https://cdn.pixabay.com/audio/2023/04/01/audio_7991f33ba0.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+</audio>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+<script>
+    const confettiCanvas = document.getElementById('confetti');
+    const confettiInstance = confetti.create(confettiCanvas, { resize: true, useWorker: true });
+
+    function fireConfetti() {
+        confettiInstance({
+            particleCount: 200,
+            spread: 100,
+            origin: { y: 0.6 }
+        });
+    }
+
+    fireConfetti();
+
+    // Play music on user interaction
+    window.addEventListener('click', () => {
+        const music = document.getElementById('celebrateMusic');
+        music.muted = false;
+        music.play();
+    }, { once: true });
+
+    // After 5 seconds redirect to alarms
+    setTimeout(() => {
+        window.location.href = "/alarms";
+    }, 5000);
+</script>
+
+</body>
+</html>
